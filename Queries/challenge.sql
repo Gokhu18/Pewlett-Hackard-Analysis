@@ -102,12 +102,13 @@ WHERE emp_row_number =1;
 -- Get frequency count of employee titles 
 SELECT *, count(ct.Employee_number) 
 		OVER (PARTITION BY ct.title ORDER BY ct.from_date DESC) AS emp_count
+INTO challenge_title_info
 FROM current_title_info AS ct;
-
 
 -- eleigible for mentor program
 SELECT em.emp_no,em.first_name, em.last_name, 
     t.title AS Title, t.from_date, t.to_date
+INTO challenge_mentor_info
 FROM Employees AS em
 INNER JOIN titles AS t ON em.emp_no = t.emp_no
 WHERE (em.birth_date BETWEEN '1965-01-01' AND '1965-12-31');
