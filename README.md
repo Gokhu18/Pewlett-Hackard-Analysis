@@ -1,26 +1,54 @@
 # Pewlett-Hackard-Analysis
-Build employee Database with PostgreSQL
+Build Employee Database with PostgreSQL and perform SQL queries to explore and analysis data. 
 
 
 # Challenge
 
-To create the new list of potential mentors, you will need to create a query that returns a list of current employees eligible for retirement, as well as their most recent titles. To get the final list with the recent titles, you’ll also need to partition the data so that each employee is only included on the list once. In addition, you’ll need to perform a query that shows how many current employees of each title are presently eligible for retirement. The final query should return the potential mentor’s employee number, first and last name, their title, birth date and employment dates.
+To create the new list of potential mentors, 
+you will need to create a query that returns a list of current employees eligible for retirement, as well as their most recent titles. In addition, you’ll need to perform a query that shows how many current employees of each title are presently eligible for retirement. 
+
+The final query should return the potential mentor’s employee number, first and last name, their title, birth date and employment dates.
 
 ## Object
 
 Create a list of candidates for the mentorship program.
-Use SQL perform several queries.
-
-1. Use an ERD to understand relationships between SQL tables.
 
 
+1. the ERD demonstrates relationships between original 6 tables.
+![](/)
 
+2. Queries for determining the number of individuals retiring 
 
-2. Create new tables in pgAdmin by using different joins.
+- SQL for all Retirement Eligibility:[retirement_info.csv](/Data/retirement_info.csv)
 
 ```
 
--- Number of title Retiring
+SELECT emp_no, birth_date, first_name, last_name, genger, hire_date
+INTO retirement_info
+FROM employees
+WHERE (birth_date BETWEEN '1952-01-01' AND '1955-12-31')
+AND (hire_date BETWEEN '1985-01-01' AND '1988-12-31');
+```
+
+In conclusion, There are 
+
+3. Queries for determining the number of individuals being hired,
+- SQL for Current Retirement Eligibility:
+```
+SELECT r.emp_no, r.first_name, r.last_name,d.dep_no, d.to_date
+INTO current_emp
+FROM retirement_info AS r
+LEFT JOIN dept_emp AS d
+ON r.emp_no = d.emp_no
+WHERE d.to_date = '9999-01-01';
+```
+
+
+In conclusion, 
+
+- SQL for Current Retirement Eligibility with title and salary information:
+[challenge_emp_info.csv](/Data/challenge_emp_info.csv)
+```
 SELECT ce.emp_no AS Employee_number,ce.first_name, ce.last_name, 
     t.title AS Title, t.from_date, s.salary AS Salary
 INTO challenge_emp_info
@@ -29,11 +57,23 @@ INNER JOIN titles AS t ON ce.emp_no = t.emp_no
 INNER JOIN salaries AS s ON ce.emp_no = s.emp_no;
 
 ```
-
-
+4. Queries for determining the number of individuals available for mentorship role:
+SQL for eleigible for mentor program, [challenge_mentor_info.csv](/Data/challenge_mentor_info.csv)
 ```
--- for each employee ONLY display the most recent title
--- by using partition by and row_number() function.
+SELECT em.emp_no,em.first_name, em.last_name, 
+    t.title AS Title, t.from_date, t.to_date
+INTO challenge_mentor_info
+FROM Employees AS em
+INNER JOIN titles AS t ON em.emp_no = t.emp_no
+INNER JOIN dept_emp AS d ON em.emp_no = d.emp_no
+WHERE (em.birth_date BETWEEN '1965-01-01' AND '1965-12-31')
+AND (d.to_date = '9999-01-01');
+```
+
+5. Queries for each employee ONLY display the most recent title
+
+- By using partition by and row_number() function.
+```
 
 SELECT employee_number, first_name, last_name, title, from_date, salary
 INTO current_title_info
@@ -41,13 +81,29 @@ FROM (SELECT *, ROW_NUMBER() OVER (PARTITION BY (cei.employee_number, cei.first_
                 ORDER BY cei.from_date DESC) AS emp_row_number
       FROM challenge_emp_info AS cei) AS unique_employee	  
 WHERE emp_row_number =1;
+```
 
--- Get frequency count of employee titles 
+6. Queries for the frequency count of employee titles 
+[challenge_title_info.csv](/Data/challenge_title_info.csv)
+```
 SELECT *, count(ct.Employee_number) 
 		OVER (PARTITION BY ct.title ORDER BY ct.from_date DESC) AS emp_count
+INTO challenge_title_info
 FROM current_title_info AS ct;
 ```
 
-3. Write basic- to intermediate-level SQL statements.
+7. Queries for the eligible for mentor program. []()
 
-4. Export new tables to a CSV file.
+```
+SELECT em.emp_no,em.first_name, em.last_name, 
+    t.title AS Title, t.from_date, t.to_date
+INTO challenge_mentor_info
+FROM Employees AS em
+INNER JOIN titles AS t ON em.emp_no = t.emp_no
+INNER JOIN dept_emp AS d ON em.emp_no = d.emp_no
+WHERE (em.birth_date BETWEEN '1965-01-01' AND '1965-12-31')
+AND (d.to_date = '9999-01-01');
+```
+### Suggestion
+
+
