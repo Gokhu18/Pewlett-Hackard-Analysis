@@ -73,7 +73,7 @@ SELECT *, count(ct.Employee_number)
 INTO challenge_title_info
 FROM current_title_info AS ct;
 ```
-and a summary count of employees for each title:
+and a summary count of employees for each title:[challenge_title_count_info.csv](/Data/challenge_title_count_info.csv)
 ```
 SELECT COUNT(employee_number), title
 FROM challenge_title_info
