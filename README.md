@@ -1,20 +1,14 @@
 # Pewlett-Hackard-Analysis
-Build Employee Database with PostgreSQL and perform SQL queries to explore and analysis data. 
-
+Build Employee Database with PostgreSQL and perform SQL queries to explore and analysis data by applying skills of Data Modeling, Data Engineer and Data Analysis.
 
 # Challenge
-
-To create the new list of potential mentors, 
-you will need to create a query that returns a list of current employees eligible for retirement, as well as their most recent titles. In addition, you’ll need to perform a query that shows how many current employees of each title are presently eligible for retirement. 
-
-The final query should return the potential mentor’s employee number, first and last name, their title, birth date and employment dates.
 
 ## Object
 
 Create a list of candidates for the mentorship program.
 
 
-1. the ERD demonstrates relationships between original 6 tables.
+1. the ERD demonstrates relationships between original 6 tables:
 ![EmployeeDB.png](/EmployeeDB.png)
 
 2. Queries for determining the number of individuals retiring:
@@ -30,9 +24,9 @@ WHERE (birth_date BETWEEN '1952-01-01' AND '1955-12-31')
 AND (hire_date BETWEEN '1985-01-01' AND '1988-12-31');
 ```
 
-**In conclusion, There are 41380 records of individuals retiring**
+**In conclusion, There are 41,380 records of individuals ready to retirement**
 
-3. Queries for determining the number of individuals being hired,
+3. Queries for determining the number of individuals being hired:
 - SQL for Current Retirement Eligibility:
 ```
 SELECT r.emp_no, r.first_name, r.last_name,d.dep_no, d.to_date
@@ -44,7 +38,7 @@ WHERE d.to_date = '9999-01-01';
 ```
 
 
-**In conclusion, there are 33118 records of Current Retirement Eligibility** 
+**In conclusion, there are 33,118 records of Current Retirement Eligibility** 
 
 - SQL for Current Retirement Eligibility with title and salary information:
 [challenge_emp_info.csv](/Data/challenge_emp_info.csv)
@@ -59,11 +53,10 @@ INNER JOIN salaries AS s ON ce.emp_no = s.emp_no;
 ```
 
 
-4. Queries for each employee ONLY display the most recent title
+4. Queries for each employee ONLY display the most recent title:
 
-*By using partition by and row_number() function.*
+- By using partition by and row_number() function.
 ```
-
 SELECT employee_number, first_name, last_name, title, from_date, salary
 INTO current_title_info
 FROM (SELECT *, ROW_NUMBER() OVER (PARTITION BY (cei.employee_number, cei.first_name, cei.last_name)
@@ -72,7 +65,7 @@ FROM (SELECT *, ROW_NUMBER() OVER (PARTITION BY (cei.employee_number, cei.first_
 WHERE emp_row_number =1;
 ```
 
-5. Queries for the frequency count of employee titles 
+5. Queries for the frequency count of employee titles:
 [challenge_title_info.csv](/Data/challenge_title_info.csv)
 ```
 SELECT *, count(ct.Employee_number) 
@@ -80,7 +73,7 @@ SELECT *, count(ct.Employee_number)
 INTO challenge_title_info
 FROM current_title_info AS ct;
 ```
-
+and a summary count of employees for each title:
 ```
 SELECT COUNT(employee_number), title
 FROM challenge_title_info
@@ -88,9 +81,7 @@ GROUP BY title;
 ```
 
 **Conclusion**
-In the 33118 records of Current Retirement Eligibility, 
-there are 251 Assistant Engineers, 2711 engineers, two managers, 
-2022 staffs,12872 Senior Staffs and 1609 Technique Leaders.
+**In the 33118 records of Current Retirement Eligibility, there are 251 Assistant Engineers, 2711 engineers, two managers 2022 staffs,12872 Senior Staffs and 1609 Technique Leaders**
 
 6. Queries for determining the number of individuals available for mentorship role:
 SQL for eligible for mentor program, [challenge_mentor_info.csv](/Data/challenge_mentor_info.csv)
@@ -109,11 +100,10 @@ AND (t.to_date = '9999-01-01');
 ### Limitation and Suggestion
  
  1. This project assumed retirement years between 1952 and 1955. 
- We need to narrow period down into 3 single year for more accurate estimate and 
- better analysis of potential job opening. 
+ We need to narrow down period into 3 single year for more accurate estimate and better analysis of potential job opening. 
 
- 2. More detail information and analysis are needed on potential mentor table, 
+ 2. More detail information and analysis are needed for potential mentor table, 
  to compare with the title table of current ready-to-retirement 
- and get estimate of outside hiring. 
+ and get a better estimate of outside hiring request. 
 
  
