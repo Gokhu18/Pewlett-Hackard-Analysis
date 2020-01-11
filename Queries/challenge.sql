@@ -104,6 +104,10 @@ SELECT *, count(ct.Employee_number)
 		OVER (PARTITION BY ct.title ORDER BY ct.from_date DESC) AS emp_count
 INTO challenge_title_info
 FROM current_title_info AS ct;
+-- get total count per title group
+SELECT COUNT(employee_number), title
+FROM challenge_title_info
+GROUP BY title;
 
 -- eleigible for mentor program
 SELECT em.emp_no,em.first_name, em.last_name, 
