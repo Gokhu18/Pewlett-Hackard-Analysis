@@ -1,22 +1,24 @@
 # Pewlett-Hackard-Analysis
-Build employee Database with PostgreSQL
+Build an employee information Database with PostgreSQL
 
 
-# Challenge
+# Challenge Object
 
-To create the new list of potential mentors, you will need to create a query that returns a list of current employees eligible for retirement, as well as their most recent titles. To get the final list with the recent titles, you’ll also need to partition the data so that each employee is only included on the list once. In addition, you’ll need to perform a query that shows how many current employees of each title are presently eligible for retirement. The final query should return the potential mentor’s employee number, first and last name, their title, birth date and employment dates.
+*new list of potential mentors*: created a query that returns a list of current employees eligible for retirement, as well as their most recent titles(**partition** the data so that each employee is only included on the list once).
 
-## Object
+The final query should return the potential mentor’s *employee number, first and last name, their title, birth date and employment dates*.
 
-Create a list of candidates for the mentorship program.
-Use SQL perform several queries.
+## Process
 
-1. Use an ERD to understand relationships between SQL tables.
+Creating a list of candidates for the mentorship program by using SQL perform several queries.
+
+1. Use an ERD (Entity Relationship Diagram) to understand relationships between SQL tables.
 
 
+2. Create new tables (challenge_emp_info) in pgAdmin by using different joins.
 
 
-2. Create new tables in pgAdmin by using different joins.
+3. Write basic- to intermediate-level SQL statements.
 
 ```
 
@@ -47,7 +49,5 @@ SELECT *, count(ct.Employee_number)
 		OVER (PARTITION BY ct.title ORDER BY ct.from_date DESC) AS emp_count
 FROM current_title_info AS ct;
 ```
-
-3. Write basic- to intermediate-level SQL statements.
 
 4. Export new tables to a CSV file.
